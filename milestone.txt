@@ -1,0 +1,3 @@
+Features
+    FEAT Hotkeys and Tooltips
+    FEAT Global Search
