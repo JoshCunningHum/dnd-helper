@@ -21,21 +21,11 @@ const label = computed(() =>
         .join("")
         .toUpperCase(),
 );
-
-const tooltip = computed(() => {
-    const d = char.value.description;
-    return d === "<p></p>" ? undefined : d;
-});
 </script>
 
 <template>
-    <div class="item min-w-0 cursor-pointer" v-tip="tooltip">
-        <Avatar
-            :image="imgurl"
-            :label="imgurl ? undefined : label"
-            shape="circle"
-            class="avatar"
-        />
+    <div class="item min-w-0 cursor-pointer">
+        <Avatar :image="imgurl" :label="imgurl ? undefined : label" shape="circle" class="avatar" />
         <div class="flex w-full min-w-0 flex-grow flex-col">
             <div class="label truncate break-keep">
                 {{ char.name }}
