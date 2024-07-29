@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import {
-    get,
-    isDefined,
-    set,
-    useElementSize,
-    useMouse,
-    useMousePressed,
-    useWindowSize,
-} from "@vueuse/core";
+import { isDefined, useElementSize, useMouse, useMousePressed, useWindowSize } from "@vueuse/core";
 import { computed, ref, watch } from "vue";
 import { TooltipValue } from "../types";
 
@@ -33,11 +25,24 @@ watch(isMousePressed, (v) => {
 const data = computed<Exclude<TooltipValue, string> | undefined>(() => {
     const { value: els } = elementsAtMouse;
     let data: TooltipValue | undefined = undefined;
-    for (const el of els.reverse()) {
+    let element: (typeof els)[number] | undefined = undefined;
+    let elementindex = -1;
+    for (let i = 0; i < els.length; i++) {
+        const el = els[i];
         const { __TOOLTIP__ } = (el as HTMLElement).dataset;
-        if (__TOOLTIP__) data = JSON.parse(__TOOLTIP__) as TooltipValue;
+        if (__TOOLTIP__) {
+            data = JSON.parse(__TOOLTIP__) as TooltipValue;
+            element = el;
+            elementindex = i;
+            break;
+        }
     }
     if (!data) return undefined;
+
+    // Check first if element is visible, if not then don't continue
+    const [first] = els;
+    if (element && !element.contains(first) && elementindex > 0) return undefined;
+
     if (typeof data === "string") {
         if (data === "") return undefined;
         return { text: data };
@@ -61,22 +66,13 @@ const container = ref<InstanceType<typeof HTMLDivElement>>();
 const { height: maxY, width: maxX } = useWindowSize();
 const { height, width } = useElementSize(container);
 
-const isYOverlap = computed(
-    () => mY.value + offset.value[1] + height.value > maxY.value - PADDING,
-);
-const isXOverlap = computed(
-    () => mX.value + offset.value[0] + width.value > maxX.value - PADDING,
-);
+const isYOverlap = computed(() => mY.value + offset.value[1] + height.value > maxY.value - PADDING);
+const isXOverlap = computed(() => mX.value + offset.value[0] + width.value > maxX.value - PADDING);
 
 /**Computed X */
-const x = computed(
-    () => mX.value - (isXOverlap.value ? width.value + offset.value[0] * 2 : 0),
-);
+const x = computed(() => mX.value - (isXOverlap.value ? width.value + offset.value[0] * 2 : 0));
 /**Computed Y */
-const y = computed(
-    () =>
-        mY.value - (isYOverlap.value ? height.value + offset.value[1] * 2 : 0),
-);
+const y = computed(() => mY.value - (isYOverlap.value ? height.value + offset.value[1] * 2 : 0));
 
 //#region Tooltip Visibility
 const lbl = ref<InstanceType<typeof HTMLDivElement>>();
@@ -93,11 +89,7 @@ const active = computed(() => {
         <div class="position container absolute shadow-lg" ref="container">
             <div class="label" v-html="text"></div>
             <div v-if="!!hotkey">
-                <div
-                    class="hotkey-list"
-                    v-for="[label, value] in Object.entries(hotkey)"
-                    :key="label"
-                >
+                <div class="hotkey-list" v-for="[label, value] in Object.entries(hotkey)" :key="label">
                     <span class="hotkey-label">{{ label }}</span>
                     <span class="hotkey-value">{{ value }}</span>
                 </div>
