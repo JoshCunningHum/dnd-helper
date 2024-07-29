@@ -4,6 +4,7 @@ import { Character } from "../../../../types/Characters";
 import States from "./States.vue";
 import History from "./History.vue";
 import { TooltipValue } from "../../../../plugins/tooltip/types";
+import { useConfigStore } from "../../../../stores/config";
 
 export interface CharacterTab {
     type: string;
@@ -11,22 +12,39 @@ export interface CharacterTab {
     tooltip?: TooltipValue;
 }
 
-export const tabs = [
-    {
-        type: "Description",
-        component: markRaw(Description),
-        tooltip: {
-            text: "Double click description to edit",
-        },
-    },
-    {
-        type: "States",
-        component: markRaw(States),
-    },
-    {
-        type: "History",
-        component: markRaw(History),
-    },
-] as const satisfies CharacterTab[];
+export const useCharacterTabs = () => {
+    const { getkey } = useConfigStore();
 
-export type TabList = (typeof tabs)[number]["type"];
+    const tabs = [
+        {
+            type: "Description",
+            component: markRaw(Description),
+            tooltip: {
+                text: "Double click description to edit",
+                hotkey: getkey("characters.description"),
+            },
+        },
+        {
+            type: "States",
+            component: markRaw(States),
+            tooltip: {
+                text: "All applied states to this character",
+                hotkey: getkey("characters.states"),
+            },
+        },
+        {
+            type: "History",
+            component: markRaw(History),
+            tooltip: {
+                text: "Saved Encounters, actions etc",
+                hotkey: getkey("characters.history"),
+            },
+        },
+    ] as const satisfies CharacterTab[];
+
+    return {
+        tabs,
+    };
+};
+
+export type TabList = ReturnType<typeof useCharacterTabs>["tabs"][number]["type"];

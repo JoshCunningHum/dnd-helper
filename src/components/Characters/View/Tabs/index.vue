@@ -1,8 +1,13 @@
 <script setup lang="ts">
+import { onMounted } from "vue";
 import Hotkey from "../../../Hotkey.vue";
-import { CharacterTab, TabList, tabs } from "./types";
+import { CharacterTab, TabList, useCharacterTabs } from "./types";
+import { set } from "@vueuse/core";
 
-const model = defineModel<CharacterTab>({ default: tabs[0] });
+const { tabs } = useCharacterTabs();
+const model = defineModel<CharacterTab>();
+
+onMounted(() => !model.value && set(model, tabs[0]));
 </script>
 
 <template>
@@ -14,7 +19,7 @@ const model = defineModel<CharacterTab>({ default: tabs[0] });
             :key="tab.type"
             v-tip="'tooltip' in tab && tab.tooltip"
             :class="{
-                selected: tab.type === model.type,
+                selected: tab.type === model?.type,
             }"
         >
             {{ tab.type }}

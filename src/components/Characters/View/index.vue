@@ -7,8 +7,10 @@ import Image from "./Image.vue";
 import Name from "./Name.vue";
 import Operations from "./Operations.vue";
 import Tabs from "./Tabs/index.vue";
-import { CharacterTab, tabs } from "./Tabs/types";
+import { CharacterTab, useCharacterTabs } from "./Tabs/types";
 import Tags from "./Tags.vue";
+
+const { tabs } = useCharacterTabs();
 
 const props = defineProps<{
     character: Character;
@@ -32,12 +34,7 @@ const tab = ref<CharacterTab>(tabs[0]);
 <template>
     <div class="flex !h-screen min-w-0 flex-col overflow-x-auto px-2">
         <div class="flex select-none">
-            <Operations
-                class="mr-4"
-                @next="() => emits('next')"
-                @prev="() => emits('prev')"
-                :character="char"
-            />
+            <Operations class="mr-4" @next="() => emits('next')" @prev="() => emits('prev')" :character="char" />
             <div class="pb-4">
                 <Image class="m-4" :character="char" />
             </div>

@@ -11,5 +11,15 @@ export const DEFAULT_KEYS = {
         prev: "arrowup",
         delete: "delete",
         rename: "f2",
+        description: "Z",
+        states: "X",
+        history: "C",
+    },
+    states: {
+        search_focus: "Ctrl+Shift+F",
+        next: "arrowdown",
+        prev: "arrowup",
+        delete: "delete",
+        rename: "f2",
     },
 };
