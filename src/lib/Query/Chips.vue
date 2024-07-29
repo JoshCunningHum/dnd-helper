@@ -18,8 +18,7 @@ const text = ref<string>("");
 const setText = (str: string) => set(text, str.trim());
 const filteredOptions = useArrayFilter(
     () => props.options,
-    (txt) =>
-        (!text.value || txt.includes(text.value)) && !model.value.includes(txt),
+    (txt) => (!text.value || txt.includes(text.value)) && !model.value.includes(txt),
 );
 
 onClickOutside(root, () => show(false));
@@ -41,12 +40,7 @@ const onFocusOut = (e: FocusEvent) => {
 </script>
 
 <template>
-    <div
-        ref="root"
-        class="relative"
-        @click="show_options = true"
-        @focusout="onFocusOut"
-    >
+    <div ref="root" class="relative" @click="show_options = true" @focusout="onFocusOut">
         <Chips
             class="w-full"
             v-model="model"
@@ -61,15 +55,14 @@ const onFocusOut = (e: FocusEvent) => {
                         setText((target as HTMLInputElement).value);
                     };
 
-                    options.instance.onChange = (e: InputEvent) =>
-                        e.preventDefault();
+                    options.instance.onChange = (e: InputEvent) => e.preventDefault();
                 },
             }"
         />
         <Listbox
             @click.stop
             v-if="show_options"
-            class="panel"
+            class="panel max-h-[200px] overflow-y-auto"
             :options="filteredOptions"
             v-model="listmodel"
             :pt="{

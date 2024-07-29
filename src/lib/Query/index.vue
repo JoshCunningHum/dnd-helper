@@ -25,20 +25,15 @@ onMounted(() => {
             state.confirm = s.confirm;
             state.approveText = s.approveText;
             state.rejectText = s.rejectText;
-            state.backdropClosing =
-                s.backdropClosing === undefined ? true : s.backdropClosing;
+            state.backdropClosing = s.backdropClosing === undefined ? true : s.backdropClosing;
             state.then = s.then;
             set(schema, s.schema as yup.ObjectSchema<Schema>);
             set(show, true);
 
             // Change positions after 1 tick
             setTimeout(() => {
-                x.value =
-                    window.innerWidth / 2 -
-                    (content.value?.clientWidth || 0) / 2;
-                y.value =
-                    window.innerHeight / 2 -
-                    (content.value?.clientHeight || 0) / 2;
+                x.value = window.innerWidth / 2 - (content.value?.clientWidth || 0) / 2;
+                y.value = window.innerHeight / 2 - (content.value?.clientHeight || 0) / 2;
             }, 10);
         },
     });
@@ -109,7 +104,7 @@ const { style, x, y, isDragging } = useDraggable(content, {
                 :style="style"
                 v-if="!hidden"
                 ref="content"
-                class="content absolute bottom-0 left-0 right-0 top-0 h-fit w-fit min-w-[400px] overflow-hidden rounded-md border border-surface-700 bg-surface-800 shadow-xl"
+                class="content absolute bottom-0 left-0 right-0 top-0 h-fit w-fit min-w-[400px] rounded-md border border-surface-700 bg-surface-800 shadow-xl"
                 :class="{
                     'cursor-grabbing': isDragging,
                 }"
@@ -134,11 +129,7 @@ const { style, x, y, isDragging } = useDraggable(content, {
                     <Hotkey @press="onCancel" hidden hotkey="escape" />
                 </div>
                 <!-- Description -->
-                <div
-                    v-if="state.description"
-                    v-html="state.description"
-                    class="px-6 pt-3 text-sm font-light"
-                ></div>
+                <div v-if="state.description" v-html="state.description" class="px-6 pt-3 text-sm font-light"></div>
                 <!-- Fields -->
                 <div v-if="!!schema" class="px-6 pb-3">
                     <Form
