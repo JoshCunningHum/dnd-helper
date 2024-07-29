@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Hotkey from "../../../Hotkey.vue";
 import { CharacterTab, TabList, tabs } from "./types";
 
 const model = defineModel<CharacterTab>({ default: tabs[0] });
@@ -15,8 +16,10 @@ const model = defineModel<CharacterTab>({ default: tabs[0] });
             :class="{
                 selected: tab.type === model.type,
             }"
-            >{{ tab.type }}</Button
         >
+            {{ tab.type }}
+            <Hotkey v-if="tab.tooltip && tab.tooltip.hotkey" :hotkey="tab.tooltip.hotkey" hidden />
+        </Button>
     </div>
 </template>
 
