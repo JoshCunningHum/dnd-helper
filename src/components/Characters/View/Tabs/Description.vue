@@ -29,14 +29,12 @@ const isEmptyText = computed(() => {
     const el = document.createElement("div");
     if (!description.value) return true;
     el.innerHTML = description.value;
-    return !el.innerText.trim();
+    return !el.innerText.trim() && !description.value.includes("img");
 });
 </script>
 
 <template>
-    <div
-        class="flex h-full min-h-0 w-full min-w-0 flex-col gap-2 overflow-y-auto pb-2 pr-2"
-    >
+    <div class="character-description flex h-full min-h-0 w-full min-w-0 flex-col gap-2 overflow-y-auto pb-2 pr-2">
         <template v-if="!isEditing">
             <Empty
                 v-if="isEmptyText"
@@ -46,16 +44,9 @@ const isEmptyText = computed(() => {
             >
                 This character is so boring <br />
                 it has no description <br />
-                <Button severity="secondary" @click="startEditing">
-                    Add Description
-                </Button>
+                <Button severity="secondary" @click="startEditing"> Add Description </Button>
             </Empty>
-            <div
-                @dblclick="startEditing"
-                v-html="character.description"
-                v-else
-                class="h-full px-2 py-1"
-            ></div>
+            <div @dblclick="startEditing" v-html="character.description" v-else class="h-full p-2"></div>
         </template>
 
         <template v-else>
@@ -68,4 +59,10 @@ const isEmptyText = computed(() => {
     </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style>
+.character-description {
+    img {
+        border-radius: 5px;
+    }
+}
+</style>
