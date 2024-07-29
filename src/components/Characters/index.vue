@@ -10,6 +10,7 @@ import { useConfigStore } from "../../stores/config";
 import Hotkey from "../Hotkey.vue";
 import List from "./List/index.vue";
 import View from "./View/index.vue";
+import cycleShift from "../../utils/cycleShift";
 
 //#region Characters
 const store = useCharactersStore();
@@ -33,13 +34,7 @@ const filtered_characters = computed(() => {
 const index = ref(characters.value.findIndex((c) => c.id === selected.value?.id));
 watch(index, (v) => set(selected, filtered_characters.value[v]));
 
-const shift = (n: number) => {
-    const len = filtered_characters.value.length;
-    if (len === 0) return;
-    const res = (get(index) + n) % len;
-    if (res < 0) set(index, len + res);
-    else set(index, res);
-};
+const shift = (n: number) => set(index, cycleShift(index.value, filtered_characters.value.length, n));
 
 //#region Splitter Ratio
 const config = useConfigStore();
