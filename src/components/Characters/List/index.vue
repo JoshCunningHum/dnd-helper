@@ -64,7 +64,7 @@ const hasScrollbars = computed(() => (list.value?.scrollHeight || 0) > (list.val
                     :char="char"
                     @contextmenu="(e) => onContextMenu(e, char)"
                     @click="index = i"
-                    :class="{ selected: index === i }"
+                    :class="{ selected: char.id === store.selected?.id }"
                 />
             </template>
             <template v-else>

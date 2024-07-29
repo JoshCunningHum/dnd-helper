@@ -3,7 +3,7 @@ import { get, set, useElementSize } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import Splitter from "primevue/splitter";
 import SplitterPanel from "primevue/splitterpanel";
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useUrlParams } from "../../hooks/urlParams";
 import { useCharactersStore } from "../../stores/characters";
 import { useConfigStore } from "../../stores/config";
@@ -30,7 +30,7 @@ const filtered_characters = computed(() => {
     });
 });
 
-const index = ref(-1);
+const index = ref(characters.value.findIndex((c) => c.id === selected.value?.id));
 watch(index, (v) => set(selected, filtered_characters.value[v]));
 
 const shift = (n: number) => {
