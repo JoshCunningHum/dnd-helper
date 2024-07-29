@@ -17,8 +17,8 @@ const store = useCharactersStore();
 const { characters, selected } = storeToRefs(store);
 
 //#region Filter Characters
-const search = useUrlParams("search", "");
-const tags = useUrlParams("tags", []);
+const search = useUrlParams("char_search", "");
+const tags = useUrlParams("char_tags", []);
 const filtered_characters = computed(() => {
     const arr = characters.value;
     const search_str = search.value.toLowerCase();

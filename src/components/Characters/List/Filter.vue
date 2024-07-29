@@ -12,7 +12,7 @@ import OverlayPanel from "primevue/overlaypanel";
 import MultiSelect from "primevue/multiselect";
 import { useCharactersStore } from "../../../stores/characters";
 
-const search = useUrlParams("search", "");
+const search = useUrlParams("char_search", "");
 const inpsearch = ref<InstanceType<typeof HTMLInputElement>>();
 
 //#region Search Focus Hotkey
