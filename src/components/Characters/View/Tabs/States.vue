@@ -7,7 +7,7 @@ const props = defineProps<{
 </script>
 
 <template>
-    <div>Hello there</div>
+    <div></div>
 </template>
 
 <style lang="scss" scoped></style>

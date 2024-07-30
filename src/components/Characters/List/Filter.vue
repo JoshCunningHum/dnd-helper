@@ -44,7 +44,7 @@ const tags = useUrlParams<string[]>("chartags", []);
         <InputText
             v-model="search"
             placeholder="Search characters..."
-            class="h-8 rounded-l-none"
+            class="h-8 rounded-l-lg"
             @keydown.enter="() => focus(false)"
             :pt="{ root: (_) => timeout(() => setInpSearch(_.instance.$el)) }"
         />
@@ -71,7 +71,11 @@ const tags = useUrlParams<string[]>("chartags", []);
         >
             <template #value> <p></p> </template>
             <template #dropdownicon>
-                <i v-if="!!tags.length" v-badge.danger="tags.length" class="pi pi-filter text-surface-300" />
+                <i
+                    v-if="!!tags.length"
+                    v-badge.danger="tags.length"
+                    class="pi pi-filter text-surface-300"
+                />
                 <i v-else class="pi pi-filter text-surface-300" />
             </template>
             <template #empty>

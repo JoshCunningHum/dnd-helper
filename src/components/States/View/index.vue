@@ -18,7 +18,9 @@ const emits = defineEmits<{
 }>();
 
 //#region Mutation Listener (for updating)
-const update = useDebounceFn(() => state.value.update(), 250);
+const update = useDebounceFn(() => {
+    state.value.update();
+}, 250);
 watch(state, update, { deep: true });
 </script>
 

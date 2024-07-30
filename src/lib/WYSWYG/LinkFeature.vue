@@ -7,7 +7,7 @@ import { EditorState } from "@tiptap/pm/state";
 import { EditorView } from "@tiptap/pm/view";
 import { BubbleMenu } from "@tiptap/vue-3";
 import { set, useElementBounding } from "@vueuse/core";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useTiptapHelpers } from "../../hooks/tiptapHelpers";
 
 const props = defineProps<{
@@ -60,12 +60,14 @@ const shouldshow = ({
 const link_txt = ref<string>("");
 const link_href = ref<string>("");
 
+watch(link_href, (v) => {
+    if (v.startsWith("http")) return;
+    set(link_href, "http://" + v);
+});
+
 const updateValues = () => {
     ecf((f) =>
-        f
-            .extendMarkRange("link")
-            .setLink({ href: link_href.value })
-            .insertContent(link_txt.value),
+        f.extendMarkRange("link").setLink({ href: link_href.value }).insertContent(link_txt.value),
     );
 };
 
@@ -78,7 +80,7 @@ const setLink = () => {
     updateValues();
 };
 
-const gotolink = () => window.open(link_href.value);
+const gotolink = () => window.open(link_href.value, "_blank");
 
 //#region Menu
 const container = ref<InstanceType<typeof HTMLDivElement>>();
@@ -122,21 +124,12 @@ const ml = computed(() => {
             <small>Link Location</small>
             <InputGroup>
                 <InputText v-model="link_href" />
-                <Button
-                    icon="pi pi-external-link"
-                    severity="secondary"
-                    link
-                    @click="gotolink"
-                />
+                <Button icon="pi pi-external-link" severity="secondary" link @click="gotolink" />
             </InputGroup>
             <small>Displayed Text</small>
             <InputText v-model="link_txt" />
             <div class="flex justify-end">
-                <Button
-                    type="submit"
-                    size="small"
-                    class="mt-2"
-                    @click="updateValues"
+                <Button type="submit" size="small" class="mt-2" @click="updateValues"
                     >Set Link</Button
                 >
             </div>

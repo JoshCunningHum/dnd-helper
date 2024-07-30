@@ -43,7 +43,7 @@ const chars = useUrlParams<number[]>("statechars", []);
         <InputText
             v-model="search"
             placeholder="Search states..."
-            class="h-8"
+            class="h-8 rounded-l-lg"
             @keydown="() => focus(false)"
             :pt="{ root: (_) => timeout(() => initInpSearch(_.instance.$el)) }"
         />

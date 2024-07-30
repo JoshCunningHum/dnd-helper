@@ -103,12 +103,11 @@ const headings = [
 ];
 const headinglvl = computed({
     get: () =>
-        (headings.findIndex((_, i) =>
-            ed()?.isActive("heading", { level: i + 1 }),
-        ) + 1) as Level | 0,
+        (headings.findIndex((_, i) => ed()?.isActive("heading", { level: i + 1 })) + 1) as
+            | Level
+            | 0,
     set: (v: Level | 0) => {
-        if (v === 0)
-            foc((f) => f.setHeading({ level: 1 }).toggleHeading({ level: 1 }));
+        if (v === 0) foc((f) => f.setHeading({ level: 1 }).toggleHeading({ level: 1 }));
         else foc((f) => f.setHeading({ level: v }));
     },
 });
@@ -135,10 +134,7 @@ const fonts = [
     },
 ];
 const font = computed({
-    get: () =>
-        fonts.find((f) =>
-            ed()?.isActive("textStyle", { fontFamily: f.value }),
-        ) || fonts[0],
+    get: () => fonts.find((f) => ed()?.isActive("textStyle", { fontFamily: f.value })) || fonts[0],
     set: (f) => foc((_) => _.setFontFamily(f.value)),
 });
 //#endregion
@@ -160,14 +156,11 @@ const underlined = computed({
 
 //#region Text Colors
 const text_fg = computed({
-    get: () =>
-        (editor.value?.getAttributes("textStyle").color as string) || "white",
+    get: () => (editor.value?.getAttributes("textStyle").color as string) || "white",
     set: (v) => foc((f) => f.setColor(v)),
 });
 const text_bg = computed({
-    get: () =>
-        (editor.value?.getAttributes("highlight").color as string) ||
-        "transparent",
+    get: () => (editor.value?.getAttributes("highlight").color as string) || "transparent",
     set: (v) => foc((f) => f.setHighlight({ color: v })),
 });
 //#endregion
@@ -196,12 +189,8 @@ const resetFormat = () => foc((f) => f.clearNodes().unsetAllMarks());
 
 <template>
     <div class="root" v-if="editor">
-        <div
-            class="toolbar-wrapper max-w-full overflow-x-auto whitespace-nowrap"
-        >
-            <div
-                class="toolbar inline-flex min-w-min flex-nowrap items-center gap-2"
-            >
+        <div class="toolbar-wrapper max-w-full overflow-x-auto whitespace-nowrap">
+            <div class="toolbar inline-flex min-w-min flex-nowrap items-center gap-2">
                 <!-- #region Heading -->
                 <Dropdown
                     :options="headingOptions"
@@ -222,10 +211,9 @@ const resetFormat = () => foc((f) => f.clearNodes().unsetAllMarks());
                     }"
                 >
                     <template #option="{ option }">
-                        <component
-                            :is="option.value > 0 ? `h${option.value}` : 'span'"
-                            >{{ option.label }}</component
-                        >
+                        <component :is="option.value > 0 ? `h${option.value}` : 'span'">{{
+                            option.label
+                        }}</component>
                     </template>
                     <template #dropdownicon>
                         <FontAwesomeIcon :icon="faSort" />
@@ -241,9 +229,7 @@ const resetFormat = () => foc((f) => f.clearNodes().unsetAllMarks());
                     v-tip="`Font`"
                 >
                     <template #option="{ option }">
-                        <span :style="`font-family: ${option.value}`">{{
-                            option.label
-                        }}</span>
+                        <span :style="`font-family: ${option.value}`">{{ option.label }}</span>
                     </template>
                     <template #dropdownicon>
                         <FontAwesomeIcon :icon="faSort" />
@@ -285,21 +271,13 @@ const resetFormat = () => foc((f) => f.clearNodes().unsetAllMarks());
                 <!-- #endregion -->
                 <!-- #region Text Color -->
                 <Divider layout="vertical" />
-                <ColorSelector
-                    tooltip="Text Color"
-                    default="white"
-                    v-model="text_fg"
-                >
+                <ColorSelector tooltip="Text Color" default="white" v-model="text_fg">
                     <template #icon>
                         <FontAwesomeIcon :icon="faFillDrip" />
                     </template>
                 </ColorSelector>
 
-                <ColorSelector
-                    tooltip="Text Background"
-                    v-model="text_bg"
-                    default="transparent"
-                >
+                <ColorSelector tooltip="Text Background" v-model="text_bg" default="transparent">
                     <template #icon>
                         <FontAwesomeIcon :icon="faFill" />
                     </template>
@@ -307,22 +285,12 @@ const resetFormat = () => foc((f) => f.clearNodes().unsetAllMarks());
                 <!-- #endregion -->
                 <!-- #region Text Align & Order -->
                 <Divider layout="vertical" />
-                <Button
-                    text
-                    severity="contrast"
-                    @click="toggleOL"
-                    v-tip="`Ordered List`"
-                >
+                <Button text severity="contrast" @click="toggleOL" v-tip="`Ordered List`">
                     <template #icon>
                         <FontAwesomeIcon :icon="faListOl" />
                     </template>
                 </Button>
-                <Button
-                    text
-                    severity="contrast"
-                    @click="toggleUL"
-                    v-tip="`Unordered List`"
-                >
+                <Button text severity="contrast" @click="toggleUL" v-tip="`Unordered List`">
                     <template #icon>
                         <FontAwesomeIcon :icon="faListUl" />
                     </template>
@@ -344,12 +312,7 @@ const resetFormat = () => foc((f) => f.clearNodes().unsetAllMarks());
                     <template #icon>
                         <FontAwesomeIcon
                             :icon="
-                                [
-                                    faAlignLeft,
-                                    faAlignCenter,
-                                    faAlignRight,
-                                    faAlignJustify,
-                                ][align]
+                                [faAlignLeft, faAlignCenter, faAlignRight, faAlignJustify][align]
                             "
                         />
                     </template>
@@ -363,12 +326,7 @@ const resetFormat = () => foc((f) => f.clearNodes().unsetAllMarks());
                 <!-- #endregion -->
                 <!-- #region Reset Styles -->
                 <Divider layout="vertical" />
-                <Button
-                    text
-                    severity="contrast"
-                    v-tip="`Format Reset`"
-                    @click="resetFormat"
-                >
+                <Button text severity="contrast" v-tip="`Format Reset`" @click="resetFormat">
                     <template #icon>
                         <FontAwesomeIcon :icon="faTextSlash" />
                     </template>
@@ -455,6 +413,22 @@ h5,
 h6,
 .h6 {
     @apply text-lg font-bold;
+}
+/* Other Formatting */
+a {
+    @apply cursor-pointer text-blue-500 underline;
+}
+
+ol,
+ul {
+    @apply ml-4 marker:w-fit marker:text-sm;
+}
+
+ol {
+    @apply list-decimal;
+}
+ul {
+    @apply list-disc;
 }
 </style>
 

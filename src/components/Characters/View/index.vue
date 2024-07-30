@@ -24,7 +24,9 @@ const emits = defineEmits<{
 }>();
 
 //#region Mutation Listener (for updating)
-const update = useDebounceFn(() => char.value.update(), 250);
+const update = useDebounceFn(() => {
+    char.value.update();
+}, 250);
 watch(char, update, { deep: true });
 
 //#region Tabs
@@ -34,7 +36,12 @@ const tab = ref<CharacterTab>(tabs[0]);
 <template>
     <div class="flex !h-screen min-w-0 flex-col overflow-x-auto px-2">
         <div class="flex select-none">
-            <Operations class="mr-4" @next="() => emits('next')" @prev="() => emits('prev')" :character="char" />
+            <Operations
+                class="mr-4"
+                @next="() => emits('next')"
+                @prev="() => emits('prev')"
+                :character="char"
+            />
             <div class="pb-4">
                 <Image class="m-4" :character="char" />
             </div>

@@ -18,7 +18,7 @@ const { state } = toRefs(props);
                     >[{{ StateType[state.data.type] }}]</span
                 >
             </div>
-            <div class="text-xs">
+            <div class="text-xs text-surface-400">
                 {{ state.triggers.length || "No" }}
                 Trigger{{ state.triggers.length === 1 ? "" : "s" }}
             </div>

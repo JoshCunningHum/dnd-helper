@@ -5,6 +5,7 @@ import { RequiredBy } from "../utils/types";
 
 type CharacterParam = RequiredBy<Character, "name">;
 
+/**This is only a blueprint, instances will be created in each session/encounters for NPCs that can be duplicated */
 export class Character {
     id: number;
     name: string;
@@ -24,7 +25,6 @@ export class Character {
         return c;
     };
 
-    /**Instantiate the data since only the properties are stored */
     static all = async () => await this.db.toArray();
 
     constructor({ id, name, color, description, image, tags }: CharacterParam) {

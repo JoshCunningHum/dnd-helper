@@ -15,9 +15,7 @@ export const useCharactersStore = defineStore("characters", () => {
 
     const selected = ref<Character>();
 
-    const tags = computed(() =>
-        Array.from(new Set(get(characters).flatMap((char) => char.tags))),
-    );
+    const tags = computed(() => Array.from(new Set(get(characters).flatMap((char) => char.tags))).sort());
 
     const add = async (...params: Parameters<typeof Character.add>) => {
         const c = await Character.add(...params);
@@ -46,7 +44,5 @@ export const useCharactersStore = defineStore("characters", () => {
 });
 
 if (import.meta.hot) {
-    import.meta.hot.accept(
-        acceptHMRUpdate(useCharactersStore, import.meta.hot),
-    );
+    import.meta.hot.accept(acceptHMRUpdate(useCharactersStore, import.meta.hot));
 }
