@@ -18,6 +18,7 @@ export const useStatesStore = defineStore("states", () => {
     whenever(
         () => !characterStore.isLoading,
         () => load(characterStore.characters),
+        { immediate: true },
     );
 
     const selected = ref<State>();

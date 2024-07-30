@@ -104,7 +104,7 @@ export class State {
     }
 
     async delete() {
-        await Character.db.delete(this.id);
+        await State.db.delete(this.id);
     }
 }
 

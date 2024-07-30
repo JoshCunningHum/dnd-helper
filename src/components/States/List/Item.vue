@@ -30,7 +30,15 @@ const { state } = toRefs(props);
                 </span>
             </template>
             <template v-else>
-                <span class="tag truncate break-keep">{{ state.attached.name }}</span>
+                <span class="tag flex items-center gap-1 truncate break-keep">
+                    <div
+                        class="size-2 rounded-full"
+                        :style="{ background: '#' + state.attached.color }"
+                    ></div>
+                    <div>
+                        {{ state.attached.name }}
+                    </div>
+                </span>
             </template>
         </div>
     </div>
