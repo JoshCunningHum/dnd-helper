@@ -18,9 +18,7 @@ const props = defineProps<{
 }>();
 
 const errors = inject<Ref<Record<string, string>>>(`query-errors`, ref({}));
-const error = computed<string>(() =>
-    props.field.key in errors.value ? errors.value[props.field.key] : "",
-);
+const error = computed<string>(() => (props.field.key in errors.value ? errors.value[props.field.key] : ""));
 </script>
 
 <template>
@@ -28,19 +26,15 @@ const error = computed<string>(() =>
         <td class="label mt-1 py-2 pb-0 pr-3">{{ field.label }}</td>
         <td class="mt-1 flex flex-col py-2 pt-0.5">
             <InputNumber v-if="field.type === 'number'" v-model="field.value" />
-            <Textarea
-                v-else-if="field.type === 'textarea'"
-                v-model="field.value"
-            />
-            <ColorPicker
-                v-else-if="field.type === 'color'"
-                v-model="field.value"
-            />
+            <Textarea v-else-if="field.type === 'textarea'" v-model="field.value" />
+            <ColorPicker v-else-if="field.type === 'color'" v-model="field.value" />
             <Dropdown
                 v-else-if="field.type === 'select'"
                 v-model="field.value"
                 :multiple="!!field.multiple"
                 :options="field.options"
+                :option-label="field.optionLabel"
+                :option-value="field.optionValue"
             />
             <SelectButton
                 v-else-if="field.type === 'select-btn'"
@@ -49,28 +43,13 @@ const error = computed<string>(() =>
                 :multiple="!!field.multiple"
                 :options="field.options"
             />
-            <TimePicker
-                v-else-if="field.type === 'time'"
-                v-model="field.value"
-            />
+            <TimePicker v-else-if="field.type === 'time'" v-model="field.value" />
 
-            <div
-                v-else-if="field.type === 'range'"
-                class="flex items-center gap-4 pr-3"
-            >
+            <div v-else-if="field.type === 'range'" class="flex items-center gap-4 pr-3">
                 <InputNumber class="!w-16" v-model="field.value" />
-                <Slider
-                    v-model="field.value"
-                    :min="field.min"
-                    :max="field.max"
-                    :step="field.step"
-                    class="flex-grow"
-                />
+                <Slider v-model="field.value" :min="field.min" :max="field.max" :step="field.step" class="flex-grow" />
             </div>
-            <InputSwitch
-                v-else-if="field.type === 'checkbox'"
-                v-model="field.value"
-            />
+            <InputSwitch v-else-if="field.type === 'checkbox'" v-model="field.value" />
             <Chips
                 v-else-if="field.type === 'chips'"
                 v-model="field.value"
@@ -83,24 +62,10 @@ const error = computed<string>(() =>
                 :accept="field.accept"
                 :multiple="field.multiple"
             />
-            <WYSWYG
-                v-else-if="field.type === 'wyswyg'"
-                v-model="field.value"
-                :placeholder="field.placeholder"
-            />
-            <Custom
-                v-else-if="field.type === 'component'"
-                v-model="field.value"
-                :mount="field.mount"
-            />
-            <InputText
-                v-else
-                v-model="field.value"
-                :placeholder="field.default"
-            />
-            <span v-if="error.length" class="h-0 text-xs text-red-400">{{
-                error
-            }}</span>
+            <WYSWYG v-else-if="field.type === 'wyswyg'" v-model="field.value" :placeholder="field.placeholder" />
+            <Custom v-else-if="field.type === 'component'" v-model="field.value" :mount="field.mount" />
+            <InputText v-else v-model="field.value" :placeholder="field.default" />
+            <span v-if="error.length" class="h-0 text-xs text-red-400">{{ error }}</span>
         </td>
     </tr>
 </template>

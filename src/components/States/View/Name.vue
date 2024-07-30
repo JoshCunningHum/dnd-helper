@@ -58,16 +58,19 @@ const startEditing = () => {
 <template>
     <div class="group flex w-full items-center rounded" ref="root" @keydown="onKeyDown">
         <div>
-            <div
-                ref="editable"
-                :contenteditable="isEditing"
-                spellcheck="false"
-                v-text="name"
-                :class="{
-                    editing: isEditing,
-                }"
-                class="h2 p-1 px-2"
-            ></div>
+            <div class="flex items-end">
+                <div
+                    ref="editable"
+                    :contenteditable="isEditing"
+                    spellcheck="false"
+                    v-text="name"
+                    :class="{
+                        editing: isEditing,
+                    }"
+                    class="h2 p-1 px-2"
+                ></div>
+                <div class="select-none text-sm text-surface-400">Id: {{ state.id }}</div>
+            </div>
             <small v-if="isEditing" class="ml-2"
                 >Press <span class="text-green-600">enter</span> to submit or press
                 <span class="text-red-400">escape</span> to cancel</small

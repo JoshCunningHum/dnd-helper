@@ -1,11 +1,5 @@
 <script setup lang="ts" generic="Schema extends Record<string, any>">
-import {
-    get,
-    set,
-    useArrayFilter,
-    watchDeep,
-    watchImmediate,
-} from "@vueuse/core";
+import { get, set, useArrayFilter, watchDeep, watchImmediate } from "@vueuse/core";
 import { computed, provide, ref, toRaw, unref } from "vue";
 import * as yup from "yup";
 import Field from "./Field.vue";
@@ -45,9 +39,7 @@ watchDeep(fields, (fs) => {
 });
 
 // Error Transformer
-const transformYupErrorsIntoObject = (
-    errors: yup.ValidationError,
-): Record<string, string> => {
+const transformYupErrorsIntoObject = (errors: yup.ValidationError): Record<string, string> => {
     const validationErrors: Record<string, string> = {};
     if (!errors.inner) return {};
     errors.inner.forEach((error: any) => {
@@ -100,10 +92,13 @@ watchImmediate(
                             meta.type === "chips"
                                 ? {
                                       empty: meta.empty,
-                                      value: [],
+                                      value: def || [],
                                   }
                                 : {
                                       multiple: meta.multiple,
+                                      optionLabel: meta.optionLabel,
+                                      optionValue: meta.optionValue,
+                                      value: meta.multiple ? [] : undefined,
                                   },
                         );
                     } else if (meta.type === "range") {
@@ -139,10 +134,7 @@ watchImmediate(
 );
 
 //#region Filtered Fields
-const filtered_fields = useArrayFilter(
-    fields,
-    (f) => !hidden_fields.value.includes(f.key),
-);
+const filtered_fields = useArrayFilter(fields, (f) => !hidden_fields.value.includes(f.key));
 
 //#region Submit
 const onSubmit = () => {
@@ -164,11 +156,7 @@ const onSubmit = () => {
         <div class="flex w-full flex-col px-4 pt-2">
             <table class="table-auto">
                 <tbody>
-                    <Field
-                        v-for="(field, i) in filtered_fields"
-                        :key="i"
-                        :field="field"
-                    />
+                    <Field v-for="(field, i) in filtered_fields" :key="i" :field="field" />
                 </tbody>
             </table>
         </div>

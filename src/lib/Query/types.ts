@@ -1,9 +1,7 @@
 import * as yup from "yup";
 import strUnionToStrArray from "../../utils/strUnionToStrArray";
 
-export type QueryInfer<Schema extends yup.AnyObject> = yup.InferType<
-    yup.ObjectSchema<Schema>
->;
+export type QueryInfer<Schema extends yup.AnyObject> = yup.InferType<yup.ObjectSchema<Schema>>;
 
 // Data that the Query Component will receive
 export interface QueryState {
@@ -30,8 +28,7 @@ interface QueryParams<Schema extends yup.AnyObject> {
     then?: (data: Schema) => Promise<void>;
 }
 
-export interface ConfirmParams<Schema extends yup.AnyObject>
-    extends QueryParams<Schema> {
+export interface ConfirmParams<Schema extends yup.AnyObject> extends QueryParams<Schema> {
     approveText?: string;
     rejectText?: string;
     onApprove?: (data: QueryInfer<Schema>) => void;
@@ -47,8 +44,10 @@ export type QuerySchemaMeta<V = any> = {
       }
     | {
           type: "select" | "select-btn";
-          options: string[];
+          options: string[] | Record<string, any>[];
           multiple?: boolean;
+          optionLabel?: string;
+          optionValue?: string;
       }
     | {
           type: "time";
@@ -84,19 +83,21 @@ export type QueryField = {
     label: string;
     key: string;
     default?: string;
-    value?: string;
+    value: any;
 } & QuerySchemaMeta;
 
 export const isSchemaMeta = (obj: unknown): obj is QuerySchemaMeta => {
     if (typeof obj !== "object") return false;
     if (obj === null) return false;
-    if (!("type" in obj && typeof obj.type === "string")) return false;
-    return isStringAFieldType(obj.type);
+    if (
+        !("type" in obj && typeof obj.type === "string" && isStringAFieldType(obj.type)) &&
+        !("show" in obj && typeof obj.show === "function")
+    )
+        return false;
+    return true;
 };
 
-export const isStringAFieldType = (
-    type: string,
-): type is QueryField["type"] => {
+export const isStringAFieldType = (type: string): type is QueryField["type"] => {
     return strUnionToStrArray<QuerySchemaMeta["type"]>()(
         "color",
         "number",
