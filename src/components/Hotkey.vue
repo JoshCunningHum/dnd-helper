@@ -18,7 +18,8 @@ const notUsingInput = computed(
     () =>
         activeElement.value?.tagName !== "INPUT" &&
         activeElement.value?.tagName !== "TEXTAREA" &&
-        !activeElement.value?.classList.contains("tiptap"),
+        !activeElement.value?.classList.contains("tiptap") &&
+        !activeElement.value?.isContentEditable,
 );
 const keys = useMagicKeys({
     passive: props.preventDefault,
