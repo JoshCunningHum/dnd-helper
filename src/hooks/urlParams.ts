@@ -32,7 +32,7 @@ export const useUrlParams = <T = any>(key: string, initial: T) => {
 
     onBeforeMount(() => {
         const urlvalue = urlparams.get(key);
-        const value = urlvalue ? JSON.parse(urlvalue) : initial;
+        const value = urlvalue ? (typeof initial === "string" ? urlvalue : JSON.parse(urlvalue)) : initial;
         set(param, value || initial);
     });
 

@@ -3,16 +3,15 @@ import { set } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import InputGroup from "primevue/inputgroup";
 import InputText from "primevue/inputtext";
+import MultiSelect from "primevue/multiselect";
 import { ref } from "vue";
 import { useUrlParams } from "../../../hooks/urlParams";
+import { useCharactersStore } from "../../../stores/characters";
 import { useConfigStore } from "../../../stores/config";
 import Hotkey from "../../Hotkey.vue";
 import Add from "./Add.vue";
-import OverlayPanel from "primevue/overlaypanel";
-import MultiSelect from "primevue/multiselect";
-import { useCharactersStore } from "../../../stores/characters";
 
-const search = useUrlParams("char_search", "");
+const search = useUrlParams("charsearch", "");
 const inpsearch = ref<InstanceType<typeof HTMLInputElement>>();
 
 //#region Search Focus Hotkey
@@ -27,8 +26,7 @@ const focus = (v: boolean) => (v ? inpsearch.value?.focus() : inpsearch.value?.b
 const store = useCharactersStore();
 const { tags: tag_options } = storeToRefs(store);
 
-const tag_panel = ref<OverlayPanel>();
-const tags = useUrlParams<string[]>("tags", []);
+const tags = useUrlParams<string[]>("chartags", []);
 </script>
 
 <template>
@@ -46,12 +44,11 @@ const tags = useUrlParams<string[]>("tags", []);
         <InputText
             v-model="search"
             placeholder="Search characters..."
-            class="h-8 rounded-none"
+            class="h-8 rounded-l-none"
             @keydown.enter="() => focus(false)"
             :pt="{ root: (_) => timeout(() => setInpSearch(_.instance.$el)) }"
         />
         <MultiSelect
-            ref="tag_panel"
             v-model="tags"
             :options="tag_options"
             pt:labelContainer:class="hidden"
@@ -78,10 +75,10 @@ const tags = useUrlParams<string[]>("tags", []);
                 <i v-else class="pi pi-filter text-surface-300" />
             </template>
             <template #empty>
-                <p>asdfasdf</p>
+                <p></p>
             </template>
             <template #content>
-                <p>sdfasdf</p>
+                <p></p>
             </template>
             <template #loader>
                 <p></p>

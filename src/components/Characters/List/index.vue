@@ -8,6 +8,7 @@ import Empty from "../../Empty.vue";
 import Filter from "./Filter.vue";
 import Item from "./Item.vue";
 import { useQuery } from "../../../hooks/query";
+import hasScrollbars from "../../../utils/hasScrollbars";
 
 //#region List Data
 const index = defineModel<number>("index", { default: 0 });
@@ -44,7 +45,7 @@ const onContextMenu = (event: MouseEvent, item: Character) => {
 
 //#region Show gutters when scrollbar is on
 const list = ref<InstanceType<typeof HTMLDivElement>>();
-const hasScrollbars = computed(() => (list.value?.scrollHeight || 0) > (list.value?.clientHeight || 0));
+const scrollable = computed(() => hasScrollbars(list));
 </script>
 
 <template>
@@ -53,7 +54,7 @@ const hasScrollbars = computed(() => (list.value?.scrollHeight || 0) > (list.val
         <div
             class="flex w-full flex-grow flex-col gap-2 overflow-y-auto py-2"
             :class="{
-                gutter: hasScrollbars,
+                gutter: scrollable,
             }"
             ref="list"
         >

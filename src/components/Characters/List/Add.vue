@@ -1,17 +1,11 @@
 <script setup lang="ts">
-import { useQuery } from "../../../hooks/query";
-import * as yup from "yup";
-import { QuerySchemaMeta } from "../../../lib/Query/types";
-import randomColor from "../../../utils/randomColor";
-import { useCharactersStore } from "../../../stores/characters";
 import { storeToRefs } from "pinia";
-import {
-    createGlobalState,
-    get,
-    promiseTimeout,
-    useMagicKeys,
-} from "@vueuse/core";
+import * as yup from "yup";
+import { useQuery } from "../../../hooks/query";
+import { QuerySchemaMeta } from "../../../lib/Query/types";
+import { useCharactersStore } from "../../../stores/characters";
 import base64ToArrayBuffer from "../../../utils/base64ToArrayBuffer";
+import randomColor from "../../../utils/randomColor";
 
 //#region Store
 const character_store = useCharactersStore();
@@ -21,15 +15,12 @@ const { tags } = storeToRefs(character_store);
 const { ask } = useQuery();
 
 const add = async () => {
-    await ask({
+    const data = await ask({
         title: "Add Character",
         approveText: "Add",
         backdropClosing: false,
         schema: yup.object({
-            name: yup
-                .string()
-                .required(`Character name is required!`)
-                .label("Name"),
+            name: yup.string().required(`Character name is required!`).label("Name"),
 
             // Optionals
             token: yup
@@ -61,6 +52,7 @@ const add = async () => {
                 .default(randomColor().slice(1, -2))
                 .meta({
                     type: "color",
+                    show: (data) => !data.name,
                 } as QuerySchemaMeta),
         }),
         then: async (data) => {
