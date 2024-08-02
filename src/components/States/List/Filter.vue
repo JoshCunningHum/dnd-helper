@@ -44,7 +44,7 @@ const chars = useUrlParams<number[]>("statechars", []);
             v-model="search"
             placeholder="Search states..."
             class="h-8 rounded-l-lg"
-            @keydown="() => focus(false)"
+            @keydown.enter="() => focus(false)"
             :pt="{ root: (_) => timeout(() => initInpSearch(_.instance.$el)) }"
         />
         <MultiSelect

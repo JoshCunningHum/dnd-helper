@@ -39,8 +39,9 @@ const filtered_states = useArrayFilter(states, (s) => {
 
     // Check if state passes the include tags test
     let tags_valid = false;
-    if (filter_tags.length && Array.isArray(s.attached)) {
-        tags_valid = s.attached.some((t) => filter_tags.includes(t));
+    if (filter_tags.length) {
+        if (Array.isArray(s.attached)) tags_valid = s.attached.some((t) => filter_tags.includes(t));
+        else tags_valid = s.attached.tags.some((t) => filter_tags.includes(t));
     } else tags_valid = true;
 
     // Check if state passes the character test
