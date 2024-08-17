@@ -7,12 +7,8 @@ const props = defineProps<{
     state: State;
 }>();
 
-//#region Add
-const isAdding = ref(false);
-const add = () => props.state.addTrigger();
-
 //#region Open Edit Modal
-const onEdit = inject("editStateTriggers", (state: State) => undefined);
+const onEdit = inject("editStateTriggers", (_: State) => undefined);
 </script>
 
 <template>

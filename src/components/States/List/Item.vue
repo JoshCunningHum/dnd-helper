@@ -18,10 +18,6 @@ const { state } = toRefs(props);
                     >[{{ StateType[state.data.type] }}]</span
                 >
             </div>
-            <div class="text-xs text-surface-400">
-                {{ state.triggers.length || "No" }}
-                Trigger{{ state.triggers.length === 1 ? "" : "s" }}
-            </div>
         </div>
         <div class="flex select-none flex-wrap gap-1">
             <template v-if="Array.isArray(state.attached)">

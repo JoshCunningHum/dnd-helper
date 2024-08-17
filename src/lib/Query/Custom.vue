@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="T">
-import { onMounted, ref } from "vue";
-import { QuerySchemaMeta } from "./types";
 import { set, whenever } from "@vueuse/core";
+import { ref } from "vue";
+import { QuerySchemaMeta } from "./types";
 
 const model = defineModel<T>({ required: true });
 

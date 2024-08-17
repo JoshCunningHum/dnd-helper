@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import Fill from "@/components/Fill.vue";
+import { Node } from "@/types/Node";
 import { State } from "@/types/States";
 import { refAutoReset, set, useMouseInElement } from "@vueuse/core";
 import { ref, toRefs, watch } from "vue";
 import Empty from "../Empty.vue";
 import AddDialog from "./AddDialog.vue";
 import Grid from "./Grid.vue";
-import { Condition } from "@/types/Condition";
-import { Node } from "@/types/Node";
 
 //#region CONFIG
 const GRID_SIZE = 100;

@@ -135,7 +135,6 @@ const add = async () => {
                 name: data.name,
                 attached: attached,
                 data: args,
-                triggers: [],
             });
         },
     });

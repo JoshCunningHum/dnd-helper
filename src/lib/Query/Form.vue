@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="Schema extends Record<string, any>">
 import { get, set, useArrayFilter, watchDeep, watchImmediate } from "@vueuse/core";
-import { computed, provide, ref, toRaw, unref } from "vue";
+import { computed, provide, ref, toRaw } from "vue";
 import * as yup from "yup";
 import Field from "./Field.vue";
 import { QueryField, QueryInfer, isSchemaMeta } from "./types";

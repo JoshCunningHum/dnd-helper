@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import OverlayPanel from "primevue/overlaypanel";
-import { ref, toRefs } from "vue";
-import darker from "../../utils/darker";
 import { get, set } from "@vueuse/core";
+import OverlayPanel from "primevue/overlaypanel";
+import { ref } from "vue";
+import darker from "../../utils/darker";
 
 const props = withDefaults(
     defineProps<{
@@ -23,15 +23,7 @@ const emits = defineEmits<{
 
 //#region Predefined Colors
 const colors: string[][] = [
-    [
-        "#79F2C0",
-        "#79E2F2",
-        "#B3D4FF",
-        "#C0B6F2",
-        "#FABCAC",
-        "#D7C77D",
-        "#EBECF0",
-    ],
+    ["#79F2C0", "#79E2F2", "#B3D4FF", "#C0B6F2", "#FABCAC", "#D7C77D", "#EBECF0"],
     [
         darker("#79F2C0", 0.5),
         darker("#79E2F2", 0.5),

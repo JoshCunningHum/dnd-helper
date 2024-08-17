@@ -1,5 +1,5 @@
 import { set } from "@vueuse/core";
-import { computed, onBeforeMount, reactive, ref, watch } from "vue";
+import { computed, onBeforeMount, reactive, watch } from "vue";
 
 import { acceptHMRUpdate, defineStore, storeToRefs } from "pinia";
 
@@ -32,7 +32,11 @@ export const useUrlParams = <T = any>(key: string, initial: T) => {
 
     onBeforeMount(() => {
         const urlvalue = urlparams.get(key);
-        const value = urlvalue ? (typeof initial === "string" ? urlvalue : JSON.parse(urlvalue)) : initial;
+        const value = urlvalue
+            ? typeof initial === "string"
+                ? urlvalue
+                : JSON.parse(urlvalue)
+            : initial;
         set(param, value || initial);
     });
 
