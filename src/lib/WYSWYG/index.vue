@@ -418,18 +418,6 @@ h6,
 a {
     @apply cursor-pointer text-blue-500 underline;
 }
-
-ol,
-ul {
-    @apply ml-4 marker:w-fit marker:text-sm;
-}
-
-ol {
-    @apply list-decimal;
-}
-ul {
-    @apply list-disc;
-}
 </style>
 
 <style lang="scss" scoped>

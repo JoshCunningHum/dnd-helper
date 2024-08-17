@@ -85,18 +85,24 @@ const active = computed(() => {
 </script>
 
 <template>
-    <div class="absolute bg-red-500" style="z-index: 99999" v-if="active">
-        <div class="position container absolute shadow-lg" ref="container">
-            <div class="label" v-html="text"></div>
-            <div v-if="!!hotkey">
-                <div class="hotkey-list" v-for="[label, value] in Object.entries(hotkey)" :key="label">
-                    <span class="hotkey-label">{{ label }}</span>
-                    <span class="hotkey-value">{{ value }}</span>
+    <Teleport to="body">
+        <div class="absolute left-0 top-0 bg-red-500" style="z-index: 99999999" v-if="active">
+            <div class="position container absolute shadow-lg" ref="container">
+                <div class="label" v-html="text"></div>
+                <div v-if="!!hotkey">
+                    <div
+                        class="hotkey-list"
+                        v-for="[label, value] in Object.entries(hotkey)"
+                        :key="label"
+                    >
+                        <span class="hotkey-label">{{ label }}</span>
+                        <span class="hotkey-value">{{ value }}</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="!hidden" ref="lbl" v-html="text"></div>
+        <div class="!hidden" ref="lbl" v-html="text"></div>
+    </Teleport>
 </template>
 
 <style lang="scss" scoped>
@@ -131,8 +137,8 @@ const active = computed(() => {
     }
 
     .hotkey-value {
+        @apply border border-surface-500 text-surface-200;
         font-size: 0.9em;
-        border: thin solid rgb(var(--surface-500));
         padding: 0px 5px;
         border-radius: 3px;
     }

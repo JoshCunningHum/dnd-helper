@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import { set } from "@vueuse/core";
 import { onMounted } from "vue";
 import Hotkey from "../../../Hotkey.vue";
-import { CharacterTab, TabList, useCharacterTabs } from "./types";
-import { set } from "@vueuse/core";
+import { CharacterTab, useCharacterTabs } from "./types";
+import { Character } from "../../../../types/Characters";
 
 const { tabs } = useCharacterTabs();
-const model = defineModel<CharacterTab>();
+const model = defineModel<CharacterTab<{ character: Character }>>();
 
 onMounted(() => !model.value && set(model, tabs[0]));
 </script>

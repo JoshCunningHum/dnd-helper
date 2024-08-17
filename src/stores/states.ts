@@ -4,6 +4,7 @@ import { ref } from "vue";
 import { useAsyncStateTimeout } from "../hooks/AsyncStateTimeout";
 import { State } from "../types/States";
 import { useCharactersStore } from "./characters";
+import { Character } from "../types/Characters";
 
 export const useStatesStore = defineStore("states", () => {
     const characterStore = useCharactersStore();
@@ -36,6 +37,9 @@ export const useStatesStore = defineStore("states", () => {
         if (index !== -1) states.value.splice(index, 1);
     };
 
+    const getStatesFrom = (...c: (Character | string)[]) =>
+        states.value.filter((state) => c.some((_) => state.isAttached(_)));
+
     return {
         states,
         selected,
@@ -44,6 +48,7 @@ export const useStatesStore = defineStore("states", () => {
         load,
         add,
         remove,
+        getStatesFrom,
     };
 });
 

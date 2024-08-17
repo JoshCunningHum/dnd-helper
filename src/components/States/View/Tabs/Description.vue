@@ -2,13 +2,13 @@
 import { get, set, syncRef } from "@vueuse/core";
 import { computed, ref } from "vue";
 import WYSWYG from "../../../../lib/WYSWYG/index.vue";
-import { Character } from "../../../../types/Characters";
+import { State } from "../../../../types/States";
 import Empty from "../../../Empty.vue";
 
 const props = defineProps<{
-    character: Character;
+    state: State;
 }>();
-const description = computed(() => props.character.description);
+const description = computed(() => props.state.description);
 
 const isEditing = ref(false);
 const startEditing = () => set(isEditing, true);
@@ -17,7 +17,7 @@ const endEditing = () => {
     set(temp, get(description));
 };
 const saveEdit = () => {
-    props.character.description = temp.value;
+    props.state.description = temp.value;
     endEditing();
 };
 
@@ -39,6 +39,7 @@ const isEmptyText = computed(() => {
     >
         <template v-if="!isEditing">
             <Empty
+            
                 v-if="isEmptyText"
                 @dblclick="startEditing"
                 icon="pi pi-times-circle"
@@ -50,7 +51,7 @@ const isEmptyText = computed(() => {
             </Empty>
             <div
                 @dblclick="startEditing"
-                v-html="character.description"
+                v-html="state.description"
                 v-else
                 class="h-full p-2"
             ></div>

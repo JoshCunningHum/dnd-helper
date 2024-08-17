@@ -40,7 +40,7 @@ onClickOutside(root, endEditing);
                 {{ tag }}
             </span>
         </template>
-        <Chips v-else :options="tags" v-model="character.tags" />
+        <Chips v-else :options="tags" class="!ml-0" v-model="character.tags" />
     </div>
 </template>
 

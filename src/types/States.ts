@@ -1,8 +1,9 @@
 import { db } from "../db";
 import deepUnref from "../utils/deepUnref";
 import { RequiredBy } from "../utils/types";
+import { Action } from "./Action";
 import { Character } from "./Characters";
-import { Trigger } from "./Triggers";
+import { Condition } from "./Condition";
 
 type StateParam = RequiredBy<State, "name" | "attached" | "data">;
 
@@ -34,8 +35,9 @@ export class State {
     id: number;
     name: string;
     attached: string[] | Character; // string for tags, number for character IDs
-    triggers: Trigger[];
     data: StateData;
+    description?: string;
+    nodes: (Action | Condition)[] = [];
 
     static db = db.states;
 
@@ -68,6 +70,7 @@ export class State {
                         return null;
                     } else c.attached = char;
                 }
+
                 return c;
             })
             .filter((c) => !!c);
@@ -77,22 +80,21 @@ export class State {
         return res;
     };
 
-    constructor({ id, name, attached, data, triggers }: StateParam) {
+    constructor({ id, name, attached, data, description }: StateParam) {
         this.id = id || -1;
         this.name = name;
         this.attached = attached;
         this.data = data;
-
-        this.triggers = triggers || [];
+        this.description = description;
     }
 
     /* TODO: Verify if all triggers are applicable to the attached 
         - For character attached (on state.attached/condition.args etc), check if character exists
         - For state attached, check if state exists
     */
-
     async update() {
         const { id, attached, ...rest } = this;
+        //@ts-ignore
         await State.db.update(
             id,
             //@ts-expect-error Serializing converts reference to serializable data
@@ -101,6 +103,18 @@ export class State {
                 attached: Array.isArray(attached) ? attached : attached.id,
             }),
         );
+    }
+
+    // Checks if this state is applied to the character
+    isAttached(c: Character | string) {
+        const { attached } = this;
+        return attached instanceof Character
+            ? typeof c === "string"
+                ? false
+                : attached.id === c.id
+            : typeof c === "string"
+              ? attached.includes(c)
+              : attached.some((tag) => c.tags.includes(tag));
     }
 
     async delete() {

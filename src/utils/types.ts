@@ -5,6 +5,30 @@ export type Prettify<T> = {
     [K in keyof T]: T[K];
 } & {};
 
+//#region Nested Keys
+export type NestedKeyOf<T> = T extends object
+    ? {
+          [K in keyof T]: K extends string ? `${K}` | `${K}.${NestedKeyOf<T[K]>}` : never;
+      }[keyof T]
+    : never;
+
+// Dynamic
+type DynamicPart = `${number}` | `${string}`;
+
+type DynamicKey<T extends string> = T extends `${infer P}[${infer _}]${infer S}`
+    ? `${P}${DynamicPart}${DynamicKey<S>}`
+    : T;
+
+export type DynamicNestedKeyOf<T> = T extends object
+    ? {
+          [K in keyof T]: K extends string
+              ?
+                    | DynamicKey<K>
+                    | `${DynamicKey<K>}${NestedKeyOf<T[K]> extends string ? `.${NestedKeyOf<T[K]>}` : ""}`
+              : never;
+      }[keyof T]
+    : never;
+
 //#region Acquire Class Properties
 type AnyFn = (...args: unknown[]) => unknown;
 
@@ -121,7 +145,9 @@ export class EventEmitter {
     off(event: string, cb: EventEmitterCB) {
         if (!this.has(event)) return;
         // Added a check where even if two functions don't belong to the same part in the memory, as long as they do the same thing, they will be removed
-        const i = this.#__evs__[event].findIndex((ev) => ev === cb || ev.toString() === cb.toString());
+        const i = this.#__evs__[event].findIndex(
+            (ev) => ev === cb || ev.toString() === cb.toString(),
+        );
         if (i === -1) return;
         this.#__evs__[event].splice(i, 1);
     }

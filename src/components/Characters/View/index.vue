@@ -30,7 +30,7 @@ const update = useDebounceFn(() => {
 watch(char, update, { deep: true });
 
 //#region Tabs
-const tab = ref<CharacterTab>(tabs[0]);
+const tab = ref<CharacterTab<{ character: Character }>>(tabs[0]);
 </script>
 
 <template>

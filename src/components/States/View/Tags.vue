@@ -7,6 +7,7 @@ import { useCharactersStore } from "../../../stores/characters";
 import { State } from "../../../types/States";
 import Dropdown from "primevue/dropdown";
 import { Character } from "../../../types/Characters";
+import CharacterDropdown from "../../CharacterDropdown.vue";
 
 const store = useCharactersStore();
 const { tags } = storeToRefs(store);
@@ -51,36 +52,12 @@ const { characters } = storeToRefs(characterStore);
     >
         <template v-if="isEditing">
             <Chips :options="tags" v-if="Array.isArray(state.attached)" v-model="state.attached" />
-            <Dropdown
+            <CharacterDropdown
                 v-else
                 v-model="state.attached"
-                :options="characters"
-                option-label="name"
+                :characters="characters"
                 @change="() => (dropdownClicked = true)"
-            >
-                <template #option="{ index, option }: { index: number; option: Character }">
-                    <div class="flex items-center gap-2">
-                        <div
-                            class="size-2 rounded-full"
-                            :style="{ background: '#' + option.color }"
-                        ></div>
-                        <div>
-                            {{ option.name }}
-                        </div>
-                    </div>
-                </template>
-                <template #value="{ value }: { placeholder: string; value: Character }">
-                    <div class="flex items-center gap-2">
-                        <div
-                            class="size-2 rounded-full"
-                            :style="{ background: '#' + value.color }"
-                        ></div>
-                        <div>
-                            {{ value.name }}
-                        </div>
-                    </div>
-                </template>
-            </Dropdown>
+            />
         </template>
         <template v-else>
             <template v-if="Array.isArray(state.attached)">

@@ -21,5 +21,7 @@ export const DEFAULT_KEYS = {
         prev: "arrowup",
         delete: "delete",
         rename: "f2",
+        description: "Z",
+        triggers: "X",
     },
 };

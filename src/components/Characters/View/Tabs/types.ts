@@ -6,9 +6,9 @@ import History from "./History.vue";
 import { TooltipValue } from "../../../../plugins/tooltip/types";
 import { useConfigStore } from "../../../../stores/config";
 
-export interface CharacterTab {
+export interface CharacterTab<Props extends Record<string, any>> {
     type: string;
-    component: DefineComponent<{ character: Character }, {}, any>;
+    component: DefineComponent<Props, {}, any>;
     tooltip?: TooltipValue;
 }
 
@@ -40,7 +40,7 @@ export const useCharacterTabs = () => {
                 hotkey: getkey("characters.history"),
             },
         },
-    ] as const satisfies CharacterTab[];
+    ] as const satisfies CharacterTab<{ character: Character }>[];
 
     return {
         tabs,

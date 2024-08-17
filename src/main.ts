@@ -9,6 +9,7 @@ import "@fontsource-variable/martian-mono";
 
 import "./assets/base.css";
 import "./assets/style.css";
+import "@/assets/theme.scss";
 import App from "./App.vue";
 
 //@ts-ignore

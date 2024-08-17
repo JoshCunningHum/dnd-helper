@@ -3,14 +3,7 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import { DEFAULT_CONFIG } from "../types/Config";
 import { computed, ref } from "vue";
 import { DEFAULT_KEYS } from "../types/Hotkeys";
-
-type NestedKeyOf<T> = T extends object
-    ? {
-          [K in keyof T]: K extends string
-              ? `${K}` | `${K}.${NestedKeyOf<T[K]>}`
-              : never;
-      }[keyof T]
-    : never;
+import { NestedKeyOf } from "../utils/types";
 
 type KeyPattern = NestedKeyOf<typeof DEFAULT_KEYS>;
 
