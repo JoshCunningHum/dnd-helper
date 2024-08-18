@@ -2,6 +2,7 @@ import { RequiredBy } from "@/utils/types";
 import { Node } from "./Node";
 import { Character } from "./Characters";
 import { State } from "./States";
+import uuid from "@/utils/uuid";
 
 type ConditionEncounter = `encounter.${"start" | "end" | "prev" | "next"}`;
 type ConditionSession = `session.${"start" | "end" | "shortr" | "longr"}`;
@@ -21,11 +22,13 @@ export type ConditionString =
 
 type ConditionArgs = RequiredBy<Condition, "node">;
 export class Condition {
+    id: string;
     node: Node;
     string: ConditionString;
     args: Record<string, any>;
 
-    constructor({ node, string, args }: ConditionArgs) {
+    constructor({ id, node, string, args }: ConditionArgs) {
+        this.id = id || uuid(14);
         this.node = node;
         this.string = string || "encounter.start";
         this.args = args || {};

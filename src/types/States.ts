@@ -70,6 +70,7 @@ export class State {
                         return null;
                     } else c.attached = char;
                 }
+                c.nodes ??= [];
 
                 return c;
             })

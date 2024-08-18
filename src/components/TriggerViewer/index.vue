@@ -3,10 +3,13 @@ import Fill from "@/components/Fill.vue";
 import { Node } from "@/types/Node";
 import { State } from "@/types/States";
 import { refAutoReset, set, useMouseInElement } from "@vueuse/core";
-import { ref, toRefs, watch } from "vue";
+import { provide, ref, toRefs, watch } from "vue";
 import Empty from "../Empty.vue";
 import AddDialog from "./AddDialog.vue";
 import Grid from "./Grid.vue";
+import NodeViewer from "./NodeViewer.vue";
+import { Condition } from "@/types/Condition";
+import { computed } from "@vue/reactivity";
 
 //#region CONFIG
 const GRID_SIZE = 100;
@@ -19,7 +22,13 @@ const props = defineProps<{
 const { editable, state } = toRefs(props);
 
 //#region Selecting Nodes
-const selected_node = ref<Node>();
+const selected_node_id = ref<string>();
+const selectNode = (id: string) => set(selected_node_id, id);
+provide("triggerviewer-selectnode", selectNode);
+
+const selected_node = computed(() =>
+    state.value.nodes.find((n) => n.id === selected_node_id.value),
+);
 
 //#region Spanning
 const oX = ref(0);
@@ -51,10 +60,12 @@ const add = (type: "Condition" | "Action") => {
     const node = new Node({ x, y });
 
     if (type === "Condition") {
+        const condition = new Condition({ node });
+        state.value.nodes.push(condition);
+        selected_node_id.value = condition.id;
     } else {
     }
 
-    selected_node.value = node;
     popup_pos.value = { x: -100, y: -100 };
 };
 </script>
@@ -72,6 +83,8 @@ const add = (type: "Condition" | "Action") => {
                     @click="showAddPopup"
                 />
 
+                <NodeViewer :state :offset-x="oX" :offset-y="oY" :selected="selected_node_id" />
+
                 <AddDialog
                     v-if="editable"
                     :x="popup_pos.x"
@@ -82,7 +95,7 @@ const add = (type: "Condition" | "Action") => {
             </div>
             <div class="min-w-48 border-l border-surface-700" v-if="editable">
                 <Empty
-                    v-if="!selected_node"
+                    v-if="!selected_node_id"
                     text="No node selected"
                     class="text-surface-400"
                     icon="pi pi-times-circle"
@@ -98,7 +111,7 @@ const add = (type: "Condition" | "Action") => {
                     @click="resetSpanOffset"
                 />
             </div>
-            <div class="space-x-2">
+            <div class="space-x-2" v-if="editable">
                 <Button size="small">Save</Button>
             </div>
         </div>
