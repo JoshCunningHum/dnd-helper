@@ -2,6 +2,7 @@
 import { useDrag } from "@/hooks/drag";
 import { Action } from "@/types/Action";
 import { Condition } from "@/types/Condition";
+import uuid from "@/utils/uuid";
 import {
     get,
     set,
@@ -19,8 +20,10 @@ const props = defineProps<{
 }>();
 
 const isCondition = computed(() => "string" in props.node);
+const editing = inject("triggerviewer-editing", ref(false));
 
 //#region Select Node
+const component_id = uuid(16);
 const selectNode = inject("triggerviewer-selectnode", (id: string) => undefined);
 
 //#region Dragging
@@ -39,10 +42,10 @@ const lY = ref(0);
 const onDragStart = () => {
     set(lX, get(x));
     set(lY, get(y));
-    selectNode(props.node.id);
+    if (editing.value) selectNode(props.node.id);
 };
 
-useDrag(root, {
+const { pressed: isDragging } = useDrag(root, {
     onStart: onDragStart,
     onMove: (dx, dy) => {
         x.value = lX.value + dx;
@@ -54,20 +57,33 @@ useDrag(root, {
 <template>
     <div
         ref="root"
-        class="position absolute -translate-x-[50%] -translate-y-[50%] cursor-pointer break-keep rounded-full border border-surface-600 bg-surface-700 px-2.5 pt-0.5 text-sm text-surface-300"
+        class="position item absolute select-none"
+        :id="`node-${component_id}`"
         :class="{
             selected,
             condition: isCondition,
             action: !isCondition,
+            'cursor-pointer': !isDragging,
+            'cursor-grabbing': isDragging,
         }"
     >
         <template v-if="'string' in node">
-            <span class="w-max whitespace-nowrap break-keep"> ({{ ~~x }}, {{ ~~y }}) </span>
+            <span class="w-max whitespace-nowrap break-keep">
+                when <span class="badge -mr-1">{{ Condition.getConditionLabel(node) }}</span>
+            </span>
         </template>
     </div>
 </template>
 
 <style lang="scss" scoped>
+.item {
+    @apply -translate-x-[50%] -translate-y-[50%] break-keep rounded-full border border-surface-600 bg-surface-700 px-2.5 pb-2 pt-2.5 text-sm text-surface-300;
+}
+
+.badge {
+    @apply rounded-full bg-surface-600 p-1 px-2;
+}
+
 .position {
     left: v-bind("x + 'px'");
     top: v-bind("y + 'px'");

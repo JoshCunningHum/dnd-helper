@@ -27,6 +27,23 @@ export class Condition {
     string: ConditionString;
     args: Record<string, any>;
 
+    static getConditionLabel(condition: Condition) {
+        const { string } = condition;
+        const [type, first, second] = string.split(".");
+
+        switch (type) {
+            case "encounter":
+                return `Encounter ${first === "prev" ? "previous turn" : first === "next" ? "next turn" : `${first}s`}`;
+            case "session":
+                break;
+            case "character":
+                break;
+            case "value":
+                break;
+        }
+        return "";
+    }
+
     constructor({ id, node, string, args }: ConditionArgs) {
         this.id = id || uuid(14);
         this.node = node;

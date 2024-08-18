@@ -68,6 +68,9 @@ const add = (type: "Condition" | "Action") => {
 
     popup_pos.value = { x: -100, y: -100 };
 };
+
+//#region Editing
+provide("triggerviewer-editing", editable);
 </script>
 
 <template>
