@@ -24,7 +24,7 @@ const editing = inject("triggerviewer-editing", ref(false));
 
 //#region Select Node
 const component_id = uuid(16);
-const selectNode = inject("triggerviewer-selectnode", (id: string) => undefined);
+const selectNode = inject("triggerviewer-selectnode", (_: string) => undefined);
 
 //#region Dragging
 const root = ref<InstanceType<typeof HTMLDivElement>>();
