@@ -86,7 +86,11 @@ const { style, x, y, isDragging } = useDraggable(content, {
 </script>
 
 <template>
-    <Screen v-if="show" @click.self="onCancel" class="absolute">
+    <Screen
+        v-if="show"
+        @click.self="onCancel"
+        class="absolute left-0 top-0 z-[99999] text-surface-100"
+    >
         <Transition name="fade">
             <div
                 v-if="!hidden"
@@ -129,7 +133,11 @@ const { style, x, y, isDragging } = useDraggable(content, {
                     <Hotkey @press="onCancel" hidden hotkey="escape" />
                 </div>
                 <!-- Description -->
-                <div v-if="state.description" v-html="state.description" class="px-6 pt-3 text-sm font-light"></div>
+                <div
+                    v-if="state.description"
+                    v-html="state.description"
+                    class="px-6 pt-3 text-sm font-light"
+                ></div>
                 <!-- Fields -->
                 <div v-if="!!schema" class="px-6 pb-3">
                     <Form

@@ -37,7 +37,9 @@ provide("editStateTriggers", startStateEdit);
         />
         <!-- All Popups and Dialogs -->
         <Toast />
-        <Query />
+        <Teleport to="body">
+            <Query />
+        </Teleport>
         <TriggerViewModal v-model:state="stateToEdit" />
         <Tooltip />
     </Screen>

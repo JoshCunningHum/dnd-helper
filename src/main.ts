@@ -31,6 +31,7 @@ import Toast from "primevue/toast";
 import ConfirmPopup from "primevue/confirmpopup";
 import ConfirmDialog from "primevue/confirmdialog";
 import InputText from "primevue/inputtext";
+import ButtonGroup from "primevue/buttongroup";
 import FocusTrap from "primevue/focustrap";
 
 //#region Own Components
@@ -55,6 +56,7 @@ app.component("Dropdown", Dropdown);
 app.component("FloatLabel", FloatLabel);
 app.component("InputGroup", InputGroup);
 app.component("Button", Button);
+app.component("ButtonGroup", ButtonGroup);
 app.component("Toast", Toast);
 app.component("ConfirmPopup", ConfirmPopup);
 app.component("ConfirmDialog", ConfirmDialog);

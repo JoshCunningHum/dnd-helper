@@ -47,7 +47,7 @@
         "typescript.inlayHints.enumMemberValues.enabled": true,
         "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
         "typescript.inlayHints.parameterNames.suppressWhenArgumentMatchesName": true,
-        "typescript.inlayHints.parameterTypes.enabled": true,
+        "typescript.inlayHints.parameterTypes.enabled": false,
         "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
         "typescript.inlayHints.variableTypes.suppressWhenTypeMatchesName": true,
         "vue.inlayHints.inlineHandlerLeading": true,

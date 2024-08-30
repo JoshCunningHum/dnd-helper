@@ -1,7 +1,9 @@
+import { useCharactersStore } from "@/stores/characters";
 import { db } from "../db";
 import deepUnref from "../utils/deepUnref";
 import randomColor from "../utils/randomColor";
 import { RequiredBy } from "../utils/types";
+import { ConditionString } from "./Condition";
 
 type CharacterParam = RequiredBy<Character, "name">;
 
@@ -26,6 +28,14 @@ export class Character {
     };
 
     static all = async () => await this.db.toArray();
+
+    static fromConditionString = (str: ConditionString) => {
+        const { characters } = useCharactersStore();
+        const [type, first, second] = str.split(".");
+        if (type !== "character") return undefined;
+        if (first === "own") return undefined;
+        return characters.find((c) => c.id === Number(first));
+    };
 
     constructor({ id, name, color, description, image, tags }: CharacterParam) {
         this.id = id || -1;

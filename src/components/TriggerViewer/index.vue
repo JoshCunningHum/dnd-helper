@@ -10,6 +10,7 @@ import Grid from "./Grid.vue";
 import NodeViewer from "./NodeViewer.vue";
 import { Condition } from "@/types/Condition";
 import { computed } from "@vue/reactivity";
+import NodeEditor from "./NodeEditor.vue";
 
 //#region CONFIG
 const GRID_SIZE = 100;
@@ -23,7 +24,10 @@ const { editable, state } = toRefs(props);
 
 //#region Selecting Nodes
 const selected_node_id = ref<string>();
-const selectNode = (id: string) => set(selected_node_id, id);
+const selectNode = (id: string) => {
+    set(selected_node_id, id);
+    hidePopup();
+};
 provide("triggerviewer-selectnode", selectNode);
 
 const selected_node = computed(() =>
@@ -47,17 +51,18 @@ const { elementX, elementY } = useMouseInElement(canvas);
 const hasMoved = ref(false);
 const popup_pos = refAutoReset({ x: -100, y: -100 }, 1000);
 const showAddPopup = () => {
-    popup_pos.value = { x: -100, y: -100 };
+    hidePopup();
     if (!editable.value || hasMoved.value) return;
     const x = elementX.value;
     const y = elementY.value;
     popup_pos.value = { x, y };
 };
+const hidePopup = () => set(popup_pos, { x: -100, y: -100 });
 const persistPopup = () => set(popup_pos, popup_pos.value);
 
 const add = (type: "Condition" | "Action") => {
     const { x, y } = popup_pos.value;
-    const node = new Node({ x, y });
+    const node = new Node({ x: x - oX.value, y: y - oY.value });
 
     if (type === "Condition") {
         const condition = new Condition({ node });
@@ -76,6 +81,15 @@ provide("triggerviewer-editing", editable);
 <template>
     <Fill class="absolute h-full w-full flex-col">
         <Fill class="flex h-full w-full">
+            <div class="min-w-48 border-r border-surface-700" v-if="editable">
+                <Empty
+                    v-if="!selected_node"
+                    text="No node selected"
+                    class="text-surface-400"
+                    icon="pi pi-times-circle"
+                />
+                <NodeEditor :state="state" v-else :node="selected_node" />
+            </div>
             <div class="relative h-full flex-grow cursor-grab overflow-hidden" ref="canvas">
                 <Grid
                     v-model:offset-x="oX"
@@ -83,6 +97,7 @@ provide("triggerviewer-editing", editable);
                     :grid-size="GRID_SIZE"
                     @mousemove="() => (hasMoved = true)"
                     @mousedown="() => (hasMoved = false)"
+                    @span="hidePopup"
                     @click="showAddPopup"
                 />
 
@@ -96,14 +111,6 @@ provide("triggerviewer-editing", editable);
                     @add="add"
                 />
             </div>
-            <div class="min-w-48 border-l border-surface-700" v-if="editable">
-                <Empty
-                    v-if="!selected_node_id"
-                    text="No node selected"
-                    class="text-surface-400"
-                    icon="pi pi-times-circle"
-                />
-            </div>
         </Fill>
         <div class="flex justify-between gap-2 border-t border-surface-700 p-2">
             <div class="space-x-2">
@@ -114,9 +121,8 @@ provide("triggerviewer-editing", editable);
                     @click="resetSpanOffset"
                 />
             </div>
-            <div class="space-x-2" v-if="editable">
-                <Button size="small">Save</Button>
-            </div>
+            <!-- Edit Only Buttons -->
+            <div class="space-x-2" v-if="editable"></div>
         </div>
     </Fill>
 </template>

@@ -1,22 +1,24 @@
 <script setup lang="ts">
 import { useDrag } from "@/hooks/drag";
+import { useCharactersStore } from "@/stores/characters";
 import { Action } from "@/types/Action";
 import { Condition } from "@/types/Condition";
 import uuid from "@/utils/uuid";
-import {
-    get,
-    set,
-    useDraggable,
-    useElementBounding,
-    useElementSize,
-    useMousePressed,
-    useParentElement,
-} from "@vueuse/core";
+import { get, set } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { computed, inject, ref, watch } from "vue";
+import CharacterBadge from "../CharacterBadge.vue";
+import { State } from "@/types/States";
 
 const props = defineProps<{
     node: Action | Condition;
+    index: number;
+    state: State;
     selected?: boolean;
+}>();
+
+const emits = defineEmits<{
+    (e: "delete", node: number): void;
 }>();
 
 const isCondition = computed(() => "string" in props.node);
@@ -52,6 +54,17 @@ const { pressed: isDragging } = useDrag(root, {
         y.value = lY.value + dy;
     },
 });
+
+//#region Delete Node
+const remove = async () => emits("delete", props.index);
+
+//#region Character References
+const characterStore = useCharactersStore();
+const { characters } = storeToRefs(characterStore);
+const getCharacterFromConditionString = (string: string) => {
+    const [category, first] = string.split(".");
+    return characters.value.find((c) => c.id === Number(first))!;
+};
 </script>
 
 <template>
@@ -68,20 +81,49 @@ const { pressed: isDragging } = useDrag(root, {
         }"
     >
         <template v-if="'string' in node">
-            <span class="w-max whitespace-nowrap break-keep">
-                when <span class="badge -mr-1">{{ Condition.getConditionLabel(node) }}</span>
+            <span class="flex items-center gap-2">
+                <span>when</span>
+                <span class="badge -mr-1.5 flex gap-1.5 whitespace-nowrap break-keep">
+                    <!-- Character -->
+                    <template v-if="node.string.startsWith('character')">
+                        <CharacterBadge
+                            v-if="!node.string.includes('.[own].')"
+                            :character="getCharacterFromConditionString(node.string)"
+                        />
+                        <div v-else>Own Character</div>
+                        <span>{{ node.string.split(".").at(-1) }}</span>
+                    </template>
+                    <!-- Default -->
+                    <template v-else>
+                        {{ Condition.getConditionLabel(node) || node.string }}
+                    </template>
+                </span>
             </span>
+            <div
+                class="absolute -bottom-[100%] right-0 space-x-2"
+                style="bottom: calc(-100% - 5px)"
+                v-if="selected"
+            >
+                <Button class="pt-1" icon="pi pi-trash" severity="danger" rounded @click="remove" />
+                <Button
+                    class="pt-1"
+                    icon="pi pi-plus"
+                    severity="warning"
+                    rounded
+                    v-tip="'Add connection'"
+                />
+            </div>
         </template>
     </div>
 </template>
 
 <style lang="scss" scoped>
 .item {
-    @apply -translate-x-[50%] -translate-y-[50%] break-keep rounded-full border border-surface-600 bg-surface-700 px-2.5 pb-2 pt-2.5 text-sm text-surface-300;
+    @apply -translate-x-[50%] -translate-y-[50%] break-keep rounded-full border border-surface-600 bg-surface-700 px-2.5 pb-0.5 pt-1 text-sm text-surface-300;
 }
 
 .badge {
-    @apply rounded-full bg-surface-600 p-1 px-2;
+    @apply rounded-full bg-surface-600 px-2 pt-1;
 }
 
 .position {

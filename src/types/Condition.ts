@@ -6,7 +6,7 @@ import uuid from "@/utils/uuid";
 
 type ConditionEncounter = `encounter.${"start" | "end" | "prev" | "next"}`;
 type ConditionSession = `session.${"start" | "end" | "shortr" | "longr"}`;
-type ConditionCharacter = `character.${Character["id"]}.${
+type ConditionCharacter = `character.${Character["id"] | "[own]"}.${
     | "enters"
     | "leave"
     | "turn"
@@ -35,7 +35,7 @@ export class Condition {
             case "encounter":
                 return `Encounter ${first === "prev" ? "previous turn" : first === "next" ? "next turn" : `${first}s`}`;
             case "session":
-                break;
+                return `${first === "shortr" ? "Short Rest" : first === "longr" ? "Long Rest" : `Session ${first}`}`;
             case "character":
                 break;
             case "value":

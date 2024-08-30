@@ -14,6 +14,10 @@ const props = withDefaults(
     },
 );
 
+const emits = defineEmits<{
+    (e: "span"): void;
+}>();
+
 //#region Spanning
 const canvas = ref<InstanceType<typeof HTMLDivElement>>();
 const { elementX: x, elementY: y } = useMouseInElement(canvas);
@@ -44,6 +48,7 @@ watch([x, y], ([x, y]) => {
     const dY = y - pY.value;
     oX.value = loX.value + dX;
     oY.value = loY.value + dY;
+    emits("span");
 });
 </script>
 
